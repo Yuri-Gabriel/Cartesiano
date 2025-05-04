@@ -6,15 +6,20 @@ public enum TokenType {
 	DIVISION('/'),
 	MULTIPLICATION('*'),
 	OPEN_PARENTHESES('('),
-	CLOSE_PARENTHESES(')');
+	CLOSE_PARENTHESES(')'),
+	VARIABLE_X('x'),
+	EXPONENTIATION('^'),
+	NUMBER();
 	
-	private char value;
+	private int value;
 
-	TokenType(char value) {
+	TokenType(int value) {
 		this.value = value;
 	}
 	
-	public char getValue() {
+	TokenType() { }
+	
+	public int getValue() {
 		return this.value;
 	}
 }
