@@ -1,67 +1,95 @@
 package main.exprInterpreter;
 
+import java.util.Optional;
+
 import main.exprInterpreter.datastruct.linkedlist.*;
 
 
 
 public class TokenMagener {
-	public static List<Token> tokenize(String expr) {
+	
+	private int index;
+	private String expr;
+	
+	public TokenMagener(String expr) {
+		this.index = 0;
+		this.expr = expr;
+	}
+	
+	public List<Token> tokenize() throws TokenException {
 		List<Token> tokens = new List<Token>();
 		
-		for(int i = 0; i < expr.length(); i++) {
-			char current_character = expr.charAt(i);
+		while(this.peak().isPresent()) {
 			String buff = "";
+			char current_character = this.consume();
 			if(Character.isWhitespace(current_character)) continue;
 			
-			if(current_character == '+') { // if current_character == +
-				buff += current_character;
-			} else if(current_character == '-') { // if current_character == -
-				buff += current_character;			
-			} else if(current_character == '*') { // if current_character == *
-				buff += current_character;
-			} else if(current_character == '/') { // if current_character == /
-				buff += current_character;
-			} else if(current_character == '(') { // if current_character == (
-				buff += current_character;
-			} else if(current_character == ')') { // if current_character == )
-				buff += current_character;
-			} else if(current_character == 'x' || current_character == 'X') {
-				buff += current_character;
-			} else if(current_character == '^') {
-				buff += current_character;
-			} else if(Character.isDigit(current_character)) {
-				try {
-					while(Character.isDigit(expr.charAt(i))) {
-						buff += expr.charAt(i);
-						i++;
+			switch (current_character) {
+				case '+':
+				case '-':
+				case '*':
+				case '/':
+				case '(':
+				case ')':
+				case 'x':
+				case '^':
+					buff += current_character;
+					break;
+	
+				default:
+					if (Character.isDigit(current_character)) {
+						try {
+							while (Character.isDigit(current_character)) {
+								buff += current_character;
+								current_character = this.consume();
+							}
+						} catch (Exception e) { }
+					} else {
+						try {
+							while (Character.isLetter(current_character)) {
+								buff += current_character;
+								current_character = this.consume();
+							}
+						} catch (Exception e) { }
 					}
-				} catch (Exception e) { }
-				i--;
+					break;
 			}
 			
-			
-			if(isNumeric(buff)) {
-				tokens.add(new Token(TokenType.NUMBER, buff.toCharArray()));
-			} else if(buff.equals(Character.toString(TokenType.ADDITION.getValue()))) {
-				tokens.add(new Token(TokenType.ADDITION, buff.toCharArray()));
-			} else if(buff.equals(Character.toString(TokenType.SUBTRACTION.getValue()))) {
-				tokens.add(new Token(TokenType.SUBTRACTION, buff.toCharArray()));
-			} else if(buff.equals(Character.toString(TokenType.MULTIPLICATION.getValue()))) {
-				tokens.add(new Token(TokenType.MULTIPLICATION, buff.toCharArray()));
-			} else if(buff.equals(Character.toString(TokenType.DIVISION.getValue()))) {
-				tokens.add(new Token(TokenType.DIVISION, buff.toCharArray()));
-			} else if(buff.equals(Character.toString(TokenType.OPEN_PARENTHESES.getValue()))) {
-				tokens.add(new Token(TokenType.OPEN_PARENTHESES, buff.toCharArray()));
-			} else if(buff.equals(Character.toString(TokenType.CLOSE_PARENTHESES.getValue()))) {
-				tokens.add(new Token(TokenType.CLOSE_PARENTHESES, buff.toCharArray()));
-			} else if(buff.equals(Character.toString(TokenType.EXPONENTIATION.getValue()))) {
-				tokens.add(new Token(TokenType.EXPONENTIATION, buff.toCharArray()));
-			} else if(buff.equals(Character.toString(TokenType.VARIABLE_X.getValue()))) {
-				tokens.add(new Token(TokenType.VARIABLE_X, buff.toCharArray()));
+			if (isNumeric(buff)) {
+				tokens.add(new Token(TokenType.NUMBER, buff));
+			} else if (buff.length() == 1) {
+				char symbol = buff.charAt(0);
+				switch (symbol) {
+					case '+':
+						tokens.add(new Token(TokenType.ADDITION));
+						break;
+					case '-':
+						tokens.add(new Token(TokenType.SUBTRACTION));
+						break;
+					case '*':
+						tokens.add(new Token(TokenType.MULTIPLICATION));
+						break;
+					case '/':
+						tokens.add(new Token(TokenType.DIVISION));
+						break;
+					case '(':
+						tokens.add(new Token(TokenType.OPEN_PARENTHESES));
+						break;
+					case ')':
+						tokens.add(new Token(TokenType.CLOSE_PARENTHESES));
+						break;
+					case '^':
+						tokens.add(new Token(TokenType.EXPONENTIATION));
+						break;
+					case 'x':
+						tokens.add(new Token(TokenType.VARIABLE_X));
+						break;
+					default:
+						throw new TokenException("Invalid symbol: " + buff);
+				}
+			} else {
+				throw new TokenException("Invalid token: " + buff);
 			}
-			
-			
-			
 		}
 		return tokens;
 	}
@@ -74,4 +102,95 @@ public class TokenMagener {
 			return false;
 		}
 	}
+	
+	private Optional<Character> peak() {
+		if(this.index > this.expr.length()) {
+			return Optional.empty();
+		} else {
+			return Optional.ofNullable(this.expr.charAt(this.index));
+		}
+	}
+	
+	private char consume() {
+		return this.expr.charAt(this.index++);
+	}
 }
+
+/*
+for(int i = 0; i < expr.length(); i++) {
+	char current_character = expr.charAt(i);
+	String buff = "";
+	if(Character.isWhitespace(current_character)) continue;
+	
+	switch (current_character) {
+		case '+':
+		case '-':
+		case '*':
+		case '/':
+		case '(':
+		case ')':
+		case 'x':
+		case '^':
+			buff += current_character;
+			break;
+
+		default:
+			if (Character.isDigit(current_character)) {
+				try {
+					while (Character.isDigit(expr.charAt(i))) {
+						buff += expr.charAt(i);
+						i++;
+					}
+				} catch (Exception e) { }
+				i--;
+			} else {
+				try {
+					while (Character.isLetter(expr.charAt(i))) {
+						buff += expr.charAt(i);
+						i++;
+					}
+				} catch (Exception e) { }
+				i--;
+			}
+			break;
+	}
+	
+	
+	if (isNumeric(buff)) {
+		tokens.add(new Token(TokenType.NUMBER, buff));
+	} else if (buff.length() == 1) {
+		char symbol = buff.charAt(0);
+		switch (symbol) {
+			case '+':
+				tokens.add(new Token(TokenType.ADDITION));
+				break;
+			case '-':
+				tokens.add(new Token(TokenType.SUBTRACTION));
+				break;
+			case '*':
+				tokens.add(new Token(TokenType.MULTIPLICATION));
+				break;
+			case '/':
+				tokens.add(new Token(TokenType.DIVISION));
+				break;
+			case '(':
+				tokens.add(new Token(TokenType.OPEN_PARENTHESES));
+				break;
+			case ')':
+				tokens.add(new Token(TokenType.CLOSE_PARENTHESES));
+				break;
+			case '^':
+				tokens.add(new Token(TokenType.EXPONENTIATION));
+				break;
+			case 'x':
+				tokens.add(new Token(TokenType.VARIABLE_X));
+				break;
+			default:
+				throw new TokenException("Invalid symbol: " + buff);
+		}
+	} else {
+		throw new TokenException("Invalid token: " + buff);
+	}
+	
+}
+*/
