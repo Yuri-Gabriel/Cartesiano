@@ -2,7 +2,7 @@
 
 ## Objetivo
 
-Este é um projeto está sendo feito com o objetivo de aprender mais sobre interface gráfica com java swing e interpretadores/compiladores de códigos. O projeto, até o momento, é dividido em duas partes principais, a interface gráfica e o interpretador de expressões matemáticas simples com apenas uma incógnita.
+Este é um projeto que está sendo feito com o objetivo de aprender mais sobre interface gráfica com java swing e interpretadores/compiladores de códigos. O projeto, até o momento, é dividido em duas partes principais, a interface gráfica e o interpretador de expressões matemáticas simples com apenas uma incógnita.
 
 ### Interface gráfica
 
