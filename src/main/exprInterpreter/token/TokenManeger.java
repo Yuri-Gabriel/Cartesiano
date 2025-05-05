@@ -1,10 +1,8 @@
-package main.exprInterpreter;
+package main.exprInterpreter.token;
 
 import java.util.Optional;
 
 import main.exprInterpreter.datastruct.linkedlist.*;
-
-
 
 public class TokenManeger {
 	

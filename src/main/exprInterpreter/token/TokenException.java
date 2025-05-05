@@ -1,4 +1,4 @@
-package main.exprInterpreter;
+package main.exprInterpreter.token;
 
 public class TokenException extends Exception {
 
