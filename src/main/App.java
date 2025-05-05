@@ -9,7 +9,7 @@ public class App {
 		//Window window = new Window();
 		String expr = "x ^ 31 + 3 - 100 / 0 * 21";
 		try {
-			List<Token> list = new TokenMagener(expr).tokenize();
+			List<Token> list = new TokenManeger(expr).tokenize();
 			while(list.haveNext()) {
 				System.out.print(list.getCurrent().getValue().getValue() + ", ");
 			}
@@ -18,14 +18,6 @@ public class App {
 		}
 		
 		
-	}
-	
-	private static String getstr(char[] list) {
-		String str = "";
-		for(char c : list) {
-			str += c;
-		}
-		return str;
 	}
 
 }

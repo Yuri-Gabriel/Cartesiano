@@ -6,12 +6,12 @@ import main.exprInterpreter.datastruct.linkedlist.*;
 
 
 
-public class TokenMagener {
+public class TokenManeger {
 	
 	private int index;
 	private String expr;
 	
-	public TokenMagener(String expr) {
+	public TokenManeger(String expr) {
 		this.index = 0;
 		this.expr = expr;
 	}
