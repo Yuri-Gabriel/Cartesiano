@@ -1,19 +1,31 @@
 package main.exprInterpreter.nodetype;
 
 public final class NodeCalc implements NodeExprValue {
+	private NodeCalc prev_calc;
 	private NodeExpr left_expr;
 	private char operator;
 	private NodeExpr right_expr;
 
-	public NodeCalc(NodeExpr left_expr, char operator, NodeExpr right_expr) {
+	public NodeCalc(NodeCalc prev_calc ,NodeExpr left_expr, char operator, NodeExpr right_expr) {
+		this.prev_calc = prev_calc;
 		this.left_expr = left_expr;
 		this.operator = operator;
 		this.right_expr = right_expr;
 	}
+	
 	public NodeCalc() {
+		this.prev_calc = null;
 		this.left_expr = null;
 		this.operator = ' ';
 		this.right_expr = null;
+	}
+
+	public NodeCalc getPrev_calc() {
+		return prev_calc;
+	}
+
+	public void setPrev_calc(NodeCalc prev_calc) {
+		this.prev_calc = prev_calc;
 	}
 
 	public NodeExpr getLeft_expr() {

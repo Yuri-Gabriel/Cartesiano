@@ -2,6 +2,7 @@ package main;
 
 import main.exprInterpreter.*;
 import main.exprInterpreter.datastruct.linkedlist.List;
+import main.exprInterpreter.nodetype.NodeCalc;
 import main.exprInterpreter.token.Token;
 import main.exprInterpreter.token.TokenException;
 import main.exprInterpreter.token.TokenManeger;
@@ -18,9 +19,12 @@ public class App {
 			while(tokens.haveNext()) {
 				System.out.print(tokens.getCurrent().getValue().getValue() + ", ");
 			}
+			NodeCalc root = new ParserExpr(tokens).parse();
 			System.out.println();
-		} catch (TokenException e) {
-			e.printStackTrace();
+		} catch (TokenException err) {
+			err.printStackTrace();
+		} catch (ParserException err) {
+			err.printStackTrace();;
 		}
 		
 		
