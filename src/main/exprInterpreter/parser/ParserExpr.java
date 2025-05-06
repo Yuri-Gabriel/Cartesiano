@@ -23,6 +23,8 @@ public class ParserExpr {
 		this.root = new NodeCalc();
 		this.current = this.root;
 		while(peak().isPresent()) {
+			if(this.index == this.tokens.length()) break;
+
 			if(peak().get().getType().equals(TokenType.OPEN_PARENTHESES)) {
 				NodeCalc next_calc = new NodeCalc();
 				if(this.current == this.root && this.root.getLeft_expr() == null) {
@@ -43,24 +45,23 @@ public class ParserExpr {
 				if(this.current.getLeft_expr() == null) {
 					this.current.setLeft_expr(new NodeExpr(term));
 				} else {
-					if(peak().get().getType().equals(TokenType.OPERATOR)) {
-						this.current.setRight_expr(new NodeExpr(term));
-	
-						NodeCalc prev_calc = new NodeCalc();
-						prev_calc.setLeft_expr(new NodeExpr(this.current));
-						this.current.setPrev_calc(prev_calc);
-						this.root = prev_calc;
-						this.current = prev_calc;
-						continue;
+					Optional<Token> current = peak();
+					boolean empty = current.isEmpty();
+					if(!empty) {
+						boolean type = current.get().getType().equals(TokenType.OPERATOR);
+						if(type) {
+							this.current.setRight_expr(new NodeExpr(term));
+		
+							NodeCalc prev_calc = new NodeCalc();
+							prev_calc.setLeft_expr(new NodeExpr(this.current));
+							this.current.setPrev_calc(prev_calc);
+							this.root = prev_calc;
+							this.current = prev_calc;
+							continue;
+						}
 					}
-
 					this.current.setRight_expr(new NodeExpr(term));
 				}
-
-				
-
-				
-				
 			} else if(peak().get().getType().equals(TokenType.OPERATOR)) {
 				if(this.current.getLeft_expr() == null) {
 					throw new ParserException("Invalid expression");
@@ -68,8 +69,15 @@ public class ParserExpr {
 				char operator = consume().getValue().charAt(0);
 				this.current.setOperator(operator);
 			} else if(peak().get().getType().equals(TokenType.CLOSE_PARENTHESES)) {
-				this.current = this.current.getPrev_calc();
-				consume();
+				this.index--;
+				if(peak().get().getType().equals(TokenType.CLOSE_PARENTHESES) || peak().get().getType().equals(TokenType.NUMBER)) {
+					this.index++;
+					this.current = this.current.getPrev_calc();
+					consume();
+				} else {
+					throw new ParserException("Invalid expression");
+				}
+				
 			}
 		}	
 		return this.root;

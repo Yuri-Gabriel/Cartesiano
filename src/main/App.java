@@ -13,7 +13,7 @@ public class App {
 
 	public static void main(String[] args) {
 		//Window window = new Window();
-		String expr = "(2 + 2) - 2";
+		String expr = "+ 5 ^ 2";
 		try {
 			List<Token> tokens = new TokenManeger(expr).tokenize();
 			while(tokens.haveNext()) {

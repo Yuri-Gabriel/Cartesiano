@@ -39,15 +39,12 @@ public class TokenManeger {
 						try {
 							while (Character.isDigit(current_character)) {
 								buff += current_character;
-								this.index++;
-								if(!peak().get().equals(')')) {
-									this.index--;
-									current_character = this.consume();
-								}
-								
+								current_character = this.consume();
 								System.out.println();
 							}
-							// Erro aqui
+							if(current_character != ' ') {
+								this.index--;
+							}
 						} catch (Exception e) { }
 					} else {
 						try {
