@@ -13,14 +13,14 @@ public class App {
 
 	public static void main(String[] args) {
 		//Window window = new Window();
-		String expr = "+ 5 ^ 2";
+		String expr = "(5 + 5) ^ 2";
 		try {
 			List<Token> tokens = new TokenManeger(expr).tokenize();
 			while(tokens.haveNext()) {
 				System.out.print(tokens.getCurrent().getValue().getValue() + ", ");
 			}
 			NodeCalc root = new ParserExpr(tokens).parse();
-			System.out.println();
+			System.out.println("\nFuncionou!");
 		} catch (TokenException err) {
 			err.printStackTrace();
 		} catch (ParserException err) {

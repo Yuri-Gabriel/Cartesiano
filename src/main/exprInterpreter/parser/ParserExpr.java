@@ -12,11 +12,16 @@ public class ParserExpr {
 	private NodeCalc root;
 	private NodeCalc current;
 
+	private int num_open_parentheses;
+	private int num_close_parentheses;
+
 	
 	public ParserExpr(List<Token> tokens) {
 		this.index = 0;
 		this.tokens = tokens;
 		this.root = null;
+		this.num_open_parentheses = 0;
+		this.num_close_parentheses = 0;
 	}
 	
 	public NodeCalc parse() throws ParserException {
@@ -37,6 +42,7 @@ public class ParserExpr {
 					this.current = (NodeCalc) this.current.getRight_expr().getExpr();
 				}
 				consume();
+				this.num_open_parentheses++;
 			} else if(peak().get().getType().equals(TokenType.NUMBER)) {
 				int value = Integer.parseInt(consume().getValue());
 				NodeTerm term = new NodeTerm();
@@ -48,8 +54,7 @@ public class ParserExpr {
 					Optional<Token> current = peak();
 					boolean empty = current.isEmpty();
 					if(!empty) {
-						boolean type = current.get().getType().equals(TokenType.OPERATOR);
-						if(type) {
+						if(current.get().getType().equals(TokenType.OPERATOR)) {
 							this.current.setRight_expr(new NodeExpr(term));
 		
 							NodeCalc prev_calc = new NodeCalc();
@@ -70,16 +75,29 @@ public class ParserExpr {
 				this.current.setOperator(operator);
 			} else if(peak().get().getType().equals(TokenType.CLOSE_PARENTHESES)) {
 				this.index--;
-				if(peak().get().getType().equals(TokenType.CLOSE_PARENTHESES) || peak().get().getType().equals(TokenType.NUMBER)) {
-					this.index++;
-					this.current = this.current.getPrev_calc();
-					consume();
+				Optional<Token> current = peak();
+				boolean empty = current.isEmpty();
+				if(!empty) {
+					if(peak().get().getType().equals(TokenType.CLOSE_PARENTHESES) || peak().get().getType().equals(TokenType.NUMBER)) {
+						this.index++;
+						if(this.current.getPrev_calc() != null) {
+							this.current = this.current.getPrev_calc();
+							consume();
+						} else {
+							throw new ParserException("Invalid expression");
+						}
+					} else {
+						throw new ParserException("Invalid expression");
+					}
 				} else {
 					throw new ParserException("Invalid expression");
 				}
-				
+				this.num_close_parentheses++;
 			}
 		}	
+		if(this.num_open_parentheses != this.num_close_parentheses) {
+			throw new ParserException("Invalid expression");
+		}
 		return this.root;
 	}
 	
