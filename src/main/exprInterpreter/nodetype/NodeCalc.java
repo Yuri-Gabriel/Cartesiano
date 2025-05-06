@@ -1,21 +1,26 @@
 package main.exprInterpreter.nodetype;
 
 public final class NodeCalc implements NodeExprValue {
-	private NodeExpr first_expr;
+	private NodeExpr left_expr;
 	private char operator;
-	private NodeExpr second_expr;
+	private NodeExpr right_expr;
 
-	public NodeCalc(NodeExpr first_expr, char operator, NodeExpr second_expr) {
-		this.first_expr = first_expr;
+	public NodeCalc(NodeExpr left_expr, char operator, NodeExpr right_expr) {
+		this.left_expr = left_expr;
 		this.operator = operator;
-		this.second_expr = second_expr;
+		this.right_expr = right_expr;
+	}
+	public NodeCalc() {
+		this.left_expr = null;
+		this.operator = ' ';
+		this.right_expr = null;
 	}
 
-	public NodeExpr getFirst_expr() {
-		return first_expr;
+	public NodeExpr getLeft_expr() {
+		return left_expr;
 	}
-	public void setFirst_expr(NodeExpr first_expr) {
-		this.first_expr = first_expr;
+	public void setLeft_expr(NodeExpr left_expr) {
+		this.left_expr = left_expr;
 	}
 	public char getOperator() {
 		return operator;
@@ -23,10 +28,10 @@ public final class NodeCalc implements NodeExprValue {
 	public void setOperator(char operator) {
 		this.operator = operator;
 	}
-	public NodeExpr getSecond_expr() {
-		return second_expr;
+	public NodeExpr getRight_expr() {
+		return right_expr;
 	}
-	public void setSecond_expr(NodeExpr second_expr) {
-		this.second_expr = second_expr;
+	public void setRight_expr(NodeExpr right_expr) {
+		this.right_expr = right_expr;
 	}
 }

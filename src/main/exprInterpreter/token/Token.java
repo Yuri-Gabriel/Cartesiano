@@ -9,9 +9,9 @@ public class Token {
 		this.value = value;
 	}
 	
-	public Token(TokenType type) {
+	public Token(TokenType type, OperatorType operatorType) {
 		this.type = type;
-		this.value = Character.toString((char) type.getValue());
+		this.value = Character.toString((char) operatorType.getValue());
 	}
 
 	public TokenType getType() {

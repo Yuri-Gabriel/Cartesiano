@@ -59,28 +59,28 @@ public class TokenManeger {
 				char symbol = buff.charAt(0);
 				switch (symbol) {
 					case '+':
-						tokens.add(new Token(TokenType.ADDITION));
+						tokens.add(new Token(TokenType.OPERATOR, OperatorType.ADDITION));
 						break;
 					case '-':
-						tokens.add(new Token(TokenType.SUBTRACTION));
+						tokens.add(new Token(TokenType.OPERATOR, OperatorType.SUBTRACTION));
 						break;
 					case '*':
-						tokens.add(new Token(TokenType.MULTIPLICATION));
+						tokens.add(new Token(TokenType.OPERATOR, OperatorType.MULTIPLICATION));
 						break;
 					case '/':
-						tokens.add(new Token(TokenType.DIVISION));
+						tokens.add(new Token(TokenType.OPERATOR, OperatorType.DIVISION));
 						break;
 					case '(':
-						tokens.add(new Token(TokenType.OPEN_PARENTHESES));
+						tokens.add(new Token(TokenType.OPEN_PARENTHESES, "("));
 						break;
 					case ')':
-						tokens.add(new Token(TokenType.CLOSE_PARENTHESES));
+						tokens.add(new Token(TokenType.CLOSE_PARENTHESES, ")"));
 						break;
 					case '^':
-						tokens.add(new Token(TokenType.EXPONENTIATION));
+						tokens.add(new Token(TokenType.OPERATOR, OperatorType.EXPONENTIATION));
 						break;
 					case 'x':
-						tokens.add(new Token(TokenType.VARIABLE_X));
+						tokens.add(new Token(TokenType.VARIABLE_X, "x"));
 						break;
 					default:
 						throw new TokenException("Invalid symbol: " + buff);

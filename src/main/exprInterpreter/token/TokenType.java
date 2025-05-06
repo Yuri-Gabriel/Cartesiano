@@ -1,14 +1,10 @@
 package main.exprInterpreter.token;
 
 public enum TokenType {
-	ADDITION('+'),
-	SUBTRACTION('-'),
-	DIVISION('/'),
-	MULTIPLICATION('*'),
 	OPEN_PARENTHESES('('),
 	CLOSE_PARENTHESES(')'),
 	VARIABLE_X('x'),
-	EXPONENTIATION('^'),
+	OPERATOR(),
 	NUMBER();
 	
 	private int value;
