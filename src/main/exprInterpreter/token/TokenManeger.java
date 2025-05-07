@@ -109,7 +109,12 @@ public class TokenManeger {
 		if(this.index > this.expr.length()) {
 			return Optional.empty();
 		} else {
-			return Optional.ofNullable(this.expr.charAt(this.index));
+			try {
+				return Optional.ofNullable(this.expr.charAt(this.index));
+			} catch (Exception err) {
+				return Optional.empty();
+			}
+			
 		}
 	}
 	

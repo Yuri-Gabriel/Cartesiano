@@ -44,6 +44,23 @@ public class ParserExpr {
 				consume();
 				this.num_open_parentheses++;
 			} else if(peak().get().getType().equals(TokenType.NUMBER)) {
+				
+				if(this.tokens.get(this.index + 1) != null) {
+					if(this.tokens.get(this.index + 1).getValue().equals("*") || 
+						this.tokens.get(this.index + 1).getValue().equals("/")) {
+							int value = Integer.parseInt(consume().getValue());
+							NodeTerm term = new NodeTerm();
+							term.setValue(value);
+
+							NodeCalc new_calc = new NodeCalc();
+							new_calc.setLeft_expr(new NodeExpr(term));
+							this.current.setRight_expr(new NodeExpr(new_calc));
+							new_calc.setPrev_calc(this.current);
+							this.current = (NodeCalc) this.current.getRight_expr().getExpr();
+							continue;
+						}
+				}
+
 				int value = Integer.parseInt(consume().getValue());
 				NodeTerm term = new NodeTerm();
 				term.setValue(value);
@@ -51,28 +68,44 @@ public class ParserExpr {
 				if(this.current.getLeft_expr() == null) {
 					this.current.setLeft_expr(new NodeExpr(term));
 				} else {
-					Optional<Token> current = peak();
-					boolean empty = current.isEmpty();
-					if(!empty) {
-						if(current.get().getType().equals(TokenType.OPERATOR)) {
-							this.current.setRight_expr(new NodeExpr(term));
+					// Optional<Token> current = peak();
+					// boolean empty = current.isEmpty();
+					// if(!empty) {
+					// 	if(current.get().getType().equals(TokenType.OPERATOR)) {
+					// 		this.current.setRight_expr(new NodeExpr(term));
 		
-							NodeCalc prev_calc = new NodeCalc();
-							prev_calc.setLeft_expr(new NodeExpr(this.current));
-							this.current.setPrev_calc(prev_calc);
-							this.root = prev_calc;
-							this.current = prev_calc;
-							continue;
-						}
-					}
+					// 		NodeCalc prev_calc = new NodeCalc();
+					// 		prev_calc.setLeft_expr(new NodeExpr(this.current));
+					// 		this.current.setPrev_calc(prev_calc);
+					// 		this.root = prev_calc;
+					// 		this.current = prev_calc;
+					// 		continue;
+					// 	}
+					// }
 					this.current.setRight_expr(new NodeExpr(term));
 				}
 			} else if(peak().get().getType().equals(TokenType.OPERATOR)) {
+				if(this.current.getOperator() != ' ') {
+					throw new ParserException("Invalid expression");
+				}
 				if(this.current.getLeft_expr() == null) {
 					throw new ParserException("Invalid expression");
 				}
 				char operator = consume().getValue().charAt(0);
-				this.current.setOperator(operator);
+
+				if(this.current.getLeft_expr() != null && 
+					this.current.getOperator() != ' ' && 
+					this.current.getRight_expr() != null) {
+						NodeCalc new_calc = new NodeCalc();
+						new_calc.setLeft_expr(new NodeExpr(this.current));
+						new_calc.setOperator(operator);
+						this.current.setPrev_calc(new_calc);
+						this.current = new_calc;
+						this.root = new_calc;
+						continue;
+				} else {
+					this.current.setOperator(operator);
+				}
 			} else if(peak().get().getType().equals(TokenType.CLOSE_PARENTHESES)) {
 				this.index--;
 				Optional<Token> current = peak();
@@ -94,7 +127,7 @@ public class ParserExpr {
 				}
 				this.num_close_parentheses++;
 			}
-		}	
+		}
 		if(this.num_open_parentheses != this.num_close_parentheses) {
 			throw new ParserException("Invalid expression");
 		}
