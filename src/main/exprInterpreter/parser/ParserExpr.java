@@ -45,9 +45,23 @@ public class ParserExpr {
 				this.num_open_parentheses++;
 			} else if(peak().get().getType().equals(TokenType.NUMBER)) {
 				
+				// Verifica de o token anterior também é um numero
+				if(this.tokens.get(this.index - 1) != null) {
+					if(this.tokens.get(this.index - 1).getType().equals(TokenType.NUMBER)) {
+						throw new ParserException("Invalid expression");
+					}
+				}
+
+				/* 
+					Verifica de o proximo token é um * ou / 
+					e aplica a ordem de precedência criando 
+					um novo NodeCalc e o inserindo no ramo direito 
+					do NodeCalc atual preentente em this.current
+				*/ 
 				if(this.tokens.get(this.index + 1) != null) {
 					if(this.tokens.get(this.index + 1).getValue().equals("*") || 
 						this.tokens.get(this.index + 1).getValue().equals("/")) {
+							
 							int value = Integer.parseInt(consume().getValue());
 							NodeTerm term = new NodeTerm();
 							term.setValue(value);
@@ -85,24 +99,51 @@ public class ParserExpr {
 					this.current.setRight_expr(new NodeExpr(term));
 				}
 			} else if(peak().get().getType().equals(TokenType.OPERATOR)) {
-				if(this.current.getOperator() != ' ') {
+				// // Verifica de o this.current já possui um operador
+				// if(this.current.getOperator() != ' ') {
+				// 	throw new ParserException("Invalid expression");
+				// }
+				this.index++;
+				if(peak().isEmpty()) {
 					throw new ParserException("Invalid expression");
+				} else {
+					boolean next_token_is_a_number = peak().get().getType().equals(TokenType.NUMBER);
+					boolean next_token_is_a_open_parentheses = peak().get().getType().equals(TokenType.OPEN_PARENTHESES);
+					if(!(next_token_is_a_number ^ next_token_is_a_open_parentheses)) { // ou um ou outro: XOR
+						throw new ParserException("Invalid expression");
+					}
 				}
+				this.index--;
+				/*
+					Verifica se o NodeCalc presente em current não
+					possui um valor no ramo da esquerda				
+				*/  
 				if(this.current.getLeft_expr() == null) {
 					throw new ParserException("Invalid expression");
 				}
 				char operator = consume().getValue().charAt(0);
 
+				/*
+					Verifica se o this.current ja possui valores
+					em seus ramos e um operador,se verdadeiro,
+					ele cria um novo NodeCalc, o adiciona como calculo
+					anterior do this.current e atualiza o this.root
+				*/
 				if(this.current.getLeft_expr() != null && 
 					this.current.getOperator() != ' ' && 
 					this.current.getRight_expr() != null) {
-						NodeCalc new_calc = new NodeCalc();
-						new_calc.setLeft_expr(new NodeExpr(this.current));
-						new_calc.setOperator(operator);
-						this.current.setPrev_calc(new_calc);
-						this.current = new_calc;
-						this.root = new_calc;
-						continue;
+						if(this.current.getPrev_calc() == null) {
+							NodeCalc new_calc = new NodeCalc();
+							new_calc.setLeft_expr(new NodeExpr(this.current));
+							new_calc.setOperator(operator);
+							this.current.setPrev_calc(new_calc);
+							this.current = new_calc;
+							this.root = new_calc;
+							continue;
+						} else {
+							this.current = this.current.getPrev_calc();
+						}
+						this.index--;
 				} else {
 					this.current.setOperator(operator);
 				}
@@ -111,9 +152,17 @@ public class ParserExpr {
 				Optional<Token> current = peak();
 				boolean empty = current.isEmpty();
 				if(!empty) {
-					if(peak().get().getType().equals(TokenType.CLOSE_PARENTHESES) || peak().get().getType().equals(TokenType.NUMBER)) {
+					/*
+					 * Verifica de o token anterior também é ")"
+					 */
+					if(peak().get().getType().equals(TokenType.CLOSE_PARENTHESES) || 
+						peak().get().getType().equals(TokenType.NUMBER)) {
 						this.index++;
-						if(this.current.getPrev_calc() != null) {
+						/*
+						 * Verifica se o this.current possui um cálculo antes dele
+						 */
+						if(this.current.getPrev_calc() != null ||
+							this.num_open_parentheses != this.num_close_parentheses - 1) {
 							this.current = this.current.getPrev_calc();
 							consume();
 						} else {

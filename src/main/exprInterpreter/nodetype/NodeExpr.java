@@ -14,4 +14,17 @@ public final class NodeExpr {
 	public void setExpr(NodeExprValue expr) {
 		this.expr = expr;
 	}
+
+	@Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        NodeExpr other = (NodeExpr) obj;
+        return this.expr.equals(other.expr);
+    }
+
+    @Override
+    public int hashCode() {
+        return expr.hashCode();
+    }
 }

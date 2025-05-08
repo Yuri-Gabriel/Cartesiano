@@ -1,6 +1,5 @@
 package main;
 
-import main.exprInterpreter.*;
 import main.exprInterpreter.datastruct.linkedlist.List;
 import main.exprInterpreter.nodetype.NodeCalc;
 import main.exprInterpreter.token.Token;
@@ -13,7 +12,7 @@ public class App {
 
 	public static void main(String[] args) {
 		//Window window = new Window();
-		String expr = "2 * 2 *+- 4 / 2";
+		String expr = "1 + 3 * 4 - 5";
 		try {
 			List<Token> tokens = new TokenManeger(expr).tokenize();
 			while(tokens.haveNext()) {

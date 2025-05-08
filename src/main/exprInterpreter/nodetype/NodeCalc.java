@@ -1,5 +1,7 @@
 package main.exprInterpreter.nodetype;
 
+import java.util.Objects;
+
 public final class NodeCalc implements NodeExprValue {
 	private NodeCalc prev_calc;
 	private NodeExpr left_expr;
@@ -46,4 +48,19 @@ public final class NodeCalc implements NodeExprValue {
 	public void setRight_expr(NodeExpr right_expr) {
 		this.right_expr = right_expr;
 	}
+
+	@Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        NodeCalc other = (NodeCalc) obj;
+        return this.operator == other.operator &&
+               this.left_expr.equals(other.left_expr) &&
+               this.right_expr.equals(other.right_expr);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(left_expr, operator, right_expr);
+    }
 }
