@@ -98,9 +98,7 @@ public class ParserExprTest {
         NodeCalc mid_calc = null;
         NodeCalc correct_tree = new NodeCalc(
             null,
-            new NodeExpr(
-                mid_calc
-            ),
+            null,
             '-',
             new NodeExpr(
                 new NodeTerm(7)
@@ -112,7 +110,7 @@ public class ParserExprTest {
                 new NodeTerm(2)
             ),
             '+',
-            new NodeExpr(mult_calc)
+            null
         );
         mult_calc = new NodeCalc(
             mid_calc,
@@ -124,6 +122,8 @@ public class ParserExprTest {
                 new NodeTerm(2)
             )
         );
+        mid_calc.setRight_expr(new NodeExpr(mult_calc));
+        correct_tree.setLeft_expr(new NodeExpr(mid_calc));
         NodeCalc tree = new ParserExpr(tokens).parse();
         Assertions.assertTrue(tree.equals(correct_tree));
     }

@@ -39,7 +39,7 @@ public class Window extends JFrame {
 		
         graph = new Graph();
         graph.setFunc((x) -> {
-			return Math.sin(Math.PI * x);
+			return x * x;
 		});
         
         JPanel layeredPane = new JPanel();
