@@ -4,10 +4,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import main.exprInterpreter.datastruct.linkedlist.List;
-import main.exprInterpreter.nodetype.NodeCalc;
-import main.exprInterpreter.nodetype.NodeExpr;
-import main.exprInterpreter.nodetype.NodeTerm;
 import main.exprInterpreter.parser.ParserExpr;
+import main.exprInterpreter.parser.nodetype.NodeCalc;
+import main.exprInterpreter.parser.nodetype.NodeExpr;
+import main.exprInterpreter.parser.nodetype.NodeTerm;
 import main.exprInterpreter.parser.ParserException;
 import main.exprInterpreter.token.TokenManeger;
 import main.exprInterpreter.token.Token;

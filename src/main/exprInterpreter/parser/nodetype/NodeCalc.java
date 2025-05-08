@@ -1,4 +1,4 @@
-package main.exprInterpreter.nodetype;
+package main.exprInterpreter.parser.nodetype;
 
 import java.util.Objects;
 

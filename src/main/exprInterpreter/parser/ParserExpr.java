@@ -2,7 +2,7 @@ package main.exprInterpreter.parser;
 
 import java.util.Optional;
 import main.exprInterpreter.datastruct.linkedlist.*;
-import main.exprInterpreter.nodetype.*;
+import main.exprInterpreter.parser.nodetype.*;
 import main.exprInterpreter.token.Token;
 import main.exprInterpreter.token.TokenType;
 
