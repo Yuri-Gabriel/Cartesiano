@@ -12,7 +12,7 @@ public class App {
 
 	public static void main(String[] args) {
 		//Window window = new Window();
-		String expr = "(2 * (7 + 3))";
+		String expr = "4 + 4 * 8 / 2 + 3 * 5";
 		try {
 			List<Token> tokens = new TokenManeger(expr).tokenize();
 			while(tokens.haveNext()) {

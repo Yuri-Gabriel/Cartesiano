@@ -1,5 +1,7 @@
 package main.exprInterpreter.datastruct.linkedlist;
 
+import java.util.function.Consumer;
+
 public class List<T> {
 	private Node<T> head;
 	private Node<T> end;
@@ -63,5 +65,9 @@ public class List<T> {
 
 	public int length() {
 		return this.length;
+	}
+
+	public void foreach(Consumer<T> action) {
+		action.accept(null);
 	}
 }

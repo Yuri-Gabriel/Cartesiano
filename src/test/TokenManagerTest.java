@@ -2,12 +2,14 @@ package test;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import main.exprInterpreter.datastruct.linkedlist.List;
 import main.exprInterpreter.token.Token;
 import main.exprInterpreter.token.TokenException;
 import main.exprInterpreter.token.TokenManeger;
 
+@ExtendWith(TimingExtension.class)
 public class TokenManagerTest {
 	
 	@Test
