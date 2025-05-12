@@ -9,8 +9,8 @@ import main.exprInterpreter.token.TokenType;
 public class ParserExpr {
     private int index;
 	private List<Token> tokens;
-	private NodeCalc root;
-	private NodeCalc current;
+	private NodeExpression root;
+	private NodeExpression current;
 	
 	public ParserExpr(List<Token> tokens) {
 		this.index = 0;
@@ -19,15 +19,18 @@ public class ParserExpr {
 	}
 
 	public NodeExpression parseExpression() {
-		return null;
-	}
-
-	public NodeFactor parseFactor() {
-		return null;
+		
 	}
 
 	public NodeTerm parseTerm() {
-		return null;
+		
+	}
+
+	public NodeFactor parseFactor() {
+		if(peak().get().getType().equals(TokenType.NUMBER)) {
+			int value = Integer.parseInt(consume().getValue());
+			return new NodeFactor().setValue(value);
+		}
 	}
 	
 	public NodeCalc parse() {
