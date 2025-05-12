@@ -18,19 +18,31 @@ public class ParserExpr {
 		this.root = null;
 	}
 
-	public NodeExpression parseExpression() {
+	public NodeExpression parseExpression() throws ParserException {
 		
 	}
 
-	public NodeTerm parseTerm() {
+	public NodeTerm parseTerm() throws ParserException {
 		
 	}
 
-	public NodeFactor parseFactor() {
-		if(peak().get().getType().equals(TokenType.NUMBER)) {
+	public NodeTermType parseFactor() throws ParserException {
+		Token token = peak().orElseThrow(() ->  new ParserException(""));
+
+		if(token.getType().equals(TokenType.NUMBER)) {
 			int value = Integer.parseInt(consume().getValue());
-			return new NodeFactor().setValue(value);
+			return new NodeFactor(value);
+		} else if(token.getType().equals(TokenType.OPEN_PARENTHESES)) {
+			consume();
+			NodeExpression expr =  this.parseExpression();
+			if(!token.getType().equals(TokenType.CLOSE_PARENTHESES) || !peak().isPresent()) {
+				throw new ParserException(null);
+			}
+			consume();
+			return expr;
 		}
+
+		throw new ParserException("Invalid expression");
 	}
 	
 	public NodeCalc parse() {

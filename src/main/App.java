@@ -6,7 +6,6 @@ import main.exprInterpreter.token.TokenException;
 import main.exprInterpreter.token.TokenManeger;
 
 import main.exprInterpreter.parser.*;
-import main.exprInterpreter.parser.nodetype.NodeCalc;
 
 public class App {
 
@@ -18,12 +17,9 @@ public class App {
 			while(tokens.haveNext()) {
 				System.out.print(tokens.getCurrent().getValue().getValue() + ", ");
 			}
-			NodeCalc root = new ParserExpr(tokens).parse();
 			System.out.println("\nFuncionou!");
 		} catch (TokenException err) {
 			err.printStackTrace();
-		} catch (ParserException err) {
-			err.printStackTrace();;
 		}
 		
 		

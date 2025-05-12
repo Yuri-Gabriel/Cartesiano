@@ -3,7 +3,9 @@ package main.exprInterpreter.parser.nodetype;
 public final class NodeFactor implements NodeTermType {
     private Integer value;
 
-    public NodeFactor() {}
+    public NodeFactor(int value) {
+        this.setValue(value);
+    }
 
     public Integer getValue() {
         return value;

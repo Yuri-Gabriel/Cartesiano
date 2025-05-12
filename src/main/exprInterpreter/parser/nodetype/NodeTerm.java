@@ -1,15 +1,17 @@
 package main.exprInterpreter.parser.nodetype;
 
-public final class NodeTerm {
-    private NodeTermType value;
+public class NodeTerm {
+    private NodeTermType type;
 
-    public NodeTerm() { }
-
-    public NodeTermType getValue() {
-        return value;
+    public NodeTerm(NodeTermType type) {
+        this.setType(type);
     }
 
-    public void setValue(NodeTermType value) {
-        this.value = value;
+    public NodeTermType getType() {
+        return type;
+    }
+
+    public void setType(NodeTermType type) {
+        this.type = type;
     }
 }
