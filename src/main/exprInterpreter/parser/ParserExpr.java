@@ -17,33 +17,54 @@ public class ParserExpr {
 	public ParserExpr(List<Token> tokens) {
 		this.index = 0;
 		this.tokens = tokens;
-		this.root = null;git 
+		this.root = null;
+	}
+	
+	public NodeExpression parse() throws ParserException {
+		return parseExpression();
 	}
 
-	public NodeExpression parseExpression() throws ParserException {
+	private NodeExpression parseExpression() throws ParserException {
 		NodeTerm term = parseTerm();
+		
+		if(peak().isEmpty()) {
+			NodeExpression expr = new NodeExpression();
+			expr.setLeft(term);
+			return expr;
+		} else if(term == null) {
+			return null;
+		}
+		
 		Token currentToken = peak().get();
-
-		if(currentToken != null) {
-			if(currentToken.getType().equals(TokenType.OPERATOR)) {
-				NodeExpression newExpr = new NodeExpression();
-				newExpr.setLeft(term);
-				newExpr.setOperation(consume());
-				newExpr.setRight(parseTerm());
-				return newExpr;
+		if(currentToken.getType().equals(TokenType.OPERATOR)) {
+			NodeExpression newExpr = new NodeExpression();
+			newExpr.setLeft(term);
+			newExpr.setOperation(consume());
+			NodeExpression expr = parseExpression();
+			if(expr.getRight() != null) {
+				newExpr.setRight(new NodeTerm(expr));
 			} else {
-				throw new ParserException(
-					"Invalid expression: missing <TokenType.NUMBER> or <TokenType.OPEN_PARENTHESES>"
-				);
+				newExpr.setRight(expr.getLeft());
 			}
+			
+			return newExpr;
 		} else {
-			return (NodeExpression) term.getType();
+			throw new ParserException(
+				"Invalid expression: missing <TokenType.NUMBER> or <TokenType.OPEN_PARENTHESES>"
+			);
 		}
 		
 	}
 
-	public NodeTerm parseTerm() throws ParserException {
+	private NodeTerm parseTerm() throws ParserException {
 		NodeTermType nodeTermType = parseFactor();
+		
+		if(peak().isEmpty()) {
+			return new NodeTerm(nodeTermType);
+		} else if(nodeTermType == null) {
+			return null;
+		}
+		
 		Token currentToken = peak().get();
 
 		if(currentToken.getType().equals(TokenType.OPERATOR)) {
@@ -55,7 +76,13 @@ public class ParserExpr {
 				NodeExpression newExpr = new NodeExpression();
 				newExpr.setLeft(new NodeTerm(nodeTermType));
 				newExpr.setOperation(consume());
-				newExpr.setRight(parseTerm());
+				NodeExpression expr = parseExpression();
+				if(expr.getRight() != null) {
+					newExpr.setRight(new NodeTerm(expr));
+				} else {
+					newExpr.setRight(expr.getLeft());
+				}
+				newExpr.setRight(new NodeTerm(expr));
 				return new NodeTerm(newExpr);
 			} else {
 				return new NodeTerm(nodeTermType);
@@ -67,7 +94,12 @@ public class ParserExpr {
 		}		
 	}
 
-	public NodeTermType parseFactor() throws ParserException {
+	private NodeTermType parseFactor() throws ParserException {
+		
+		if(peak().isEmpty()) {
+			return null;
+		}
+		
 		Token currentToken = peak().get();
 
 		if(currentToken.getType().equals(TokenType.NUMBER)) {

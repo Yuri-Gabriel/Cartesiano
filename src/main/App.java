@@ -6,19 +6,21 @@ import main.exprInterpreter.token.TokenException;
 import main.exprInterpreter.token.TokenManeger;
 
 import main.exprInterpreter.parser.*;
+import main.exprInterpreter.parser.nodetype.NodeExpression;
 
 public class App {
 
 	public static void main(String[] args) {
 		//Window window = new Window();
-		String expr = "4 + 4 * 8 / 2 + 3 * 5";
+		String expr = "1 * 1 + 1";
 		try {
 			List<Token> tokens = new TokenManeger(expr).tokenize();
 			while(tokens.haveNext()) {
 				System.out.print(tokens.getCurrent().getValue().getValue() + ", ");
 			}
+			NodeExpression tree = new ParserExpr(tokens).parse();
 			System.out.println("\nFuncionou!");
-		} catch (TokenException err) {
+		} catch (Exception err) {
 			err.printStackTrace();
 		}
 		
