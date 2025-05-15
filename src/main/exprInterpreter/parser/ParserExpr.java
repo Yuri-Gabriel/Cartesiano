@@ -11,13 +11,10 @@ import main.exprInterpreter.token.TokenType;
 public class ParserExpr {
     private int index;
 	private List<Token> tokens;
-	private NodeExpression root;
-	private NodeExpression current;
 	
 	public ParserExpr(List<Token> tokens) {
 		this.index = 0;
 		this.tokens = tokens;
-		this.root = null;
 	}
 	
 	public NodeExpression parse() throws ParserException {
@@ -26,27 +23,21 @@ public class ParserExpr {
 
 	private NodeExpression parseExpression() throws ParserException {
 		NodeTerm term = parseTerm();
-		
-		if(peak().isEmpty()) {
+
+		if(this.index >= tokens.length()) {
 			NodeExpression expr = new NodeExpression();
 			expr.setLeft(term);
 			return expr;
-		} else if(term == null) {
-			return null;
 		}
+		
 		
 		Token currentToken = peak().get();
 		if(currentToken.getType().equals(TokenType.OPERATOR)) {
 			NodeExpression newExpr = new NodeExpression();
 			newExpr.setLeft(term);
 			newExpr.setOperation(consume());
-			NodeExpression expr = parseExpression();
-			if(expr.getRight() != null) {
-				newExpr.setRight(new NodeTerm(expr));
-			} else {
-				newExpr.setRight(expr.getLeft());
-			}
-			
+			NodeTerm newTerm = parseTerm();
+ 			newExpr.setRight(newTerm);
 			return newExpr;
 		} else {
 			throw new ParserException(
@@ -58,11 +49,9 @@ public class ParserExpr {
 
 	private NodeTerm parseTerm() throws ParserException {
 		NodeTermType nodeTermType = parseFactor();
-		
-		if(peak().isEmpty()) {
+
+		if(this.index >= tokens.length()) {
 			return new NodeTerm(nodeTermType);
-		} else if(nodeTermType == null) {
-			return null;
 		}
 		
 		Token currentToken = peak().get();
@@ -76,17 +65,15 @@ public class ParserExpr {
 				NodeExpression newExpr = new NodeExpression();
 				newExpr.setLeft(new NodeTerm(nodeTermType));
 				newExpr.setOperation(consume());
-				NodeExpression expr = parseExpression();
-				if(expr.getRight() != null) {
-					newExpr.setRight(new NodeTerm(expr));
-				} else {
-					newExpr.setRight(expr.getLeft());
-				}
-				newExpr.setRight(new NodeTerm(expr));
+				NodeTerm newTerm = parseTerm();
+				newExpr.setRight(newTerm);
 				return new NodeTerm(newExpr);
 			} else {
 				return new NodeTerm(nodeTermType);
 			}
+		} else if(currentToken.getType().equals(TokenType.CLOSE_PARENTHESES)) {
+			consume();
+			return null;
 		} else {
 			throw new ParserException(
 				"Invalid expression: missing <TokenType.NUMBER> or <TokenType.OPEN_PARENTHESES>"
@@ -95,11 +82,7 @@ public class ParserExpr {
 	}
 
 	private NodeTermType parseFactor() throws ParserException {
-		
-		if(peak().isEmpty()) {
-			return null;
-		}
-		
+
 		Token currentToken = peak().get();
 
 		if(currentToken.getType().equals(TokenType.NUMBER)) {
@@ -115,11 +98,13 @@ public class ParserExpr {
 			}
 			consume();
 			return expr;
+		} else {
+			throw new ParserException(
+				"Invalid expression: migging <TokenType.NUMBER> or <TokenType.OPEN_PARENTHESES>"
+			);
 		}
 
-		throw new ParserException(
-			"Invalid expression: migging <TokenType.NUMBER> or <TokenType.OPEN_PARENTHESES>"
-		);
+		
 	}
 	
 	private Optional<Token> peak() {
