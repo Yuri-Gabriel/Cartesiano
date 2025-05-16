@@ -1,4 +1,4 @@
-package main.exprInterpreter.datastruct.linkedlist;
+package main.exprInterpreter.datastruct;
 
 import java.util.function.Consumer;
 

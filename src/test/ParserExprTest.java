@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import main.exprInterpreter.datastruct.linkedlist.List;
+import main.exprInterpreter.datastruct.linkedlist.*;
 
 import main.exprInterpreter.parser.ParserExpr;
 import main.exprInterpreter.parser.nodetype.NodeTerm;

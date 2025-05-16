@@ -1,4 +1,4 @@
-package main.exprInterpreter.datastruct.linkedlist;
+package main.exprInterpreter.datastruct;
 
 public class Node<T> {
 	private T value;

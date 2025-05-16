@@ -2,7 +2,7 @@ package main.exprInterpreter.parser;
 
 import java.util.Optional;
 
-import main.exprInterpreter.datastruct.linkedlist.*;
+import main.exprInterpreter.datastruct.*;
 import main.exprInterpreter.parser.nodetype.*;
 import main.exprInterpreter.token.OperatorType;
 import main.exprInterpreter.token.Token;
@@ -10,21 +10,22 @@ import main.exprInterpreter.token.TokenType;
 
 public class ParserExpr {
     private int index;
-	private List<Token> tokens;
+	private Queue<Token> tokens;
 	
-	public ParserExpr(List<Token> tokens) {
+	public ParserExpr(Queue<Token> tokens) {
 		this.index = 0;
 		this.tokens = tokens;
 	}
 	
 	public NodeExpression parse() throws ParserException {
-		return parseExpression();
+		NodeExpression expr = parseExpression();
+		return expr;
 	}
 
 	private NodeExpression parseExpression() throws ParserException {
 		NodeTerm term = parseTerm();
 
-		if(this.index >= tokens.length()) {
+		if(this.index >= tokens.size()) {
 			NodeExpression expr = new NodeExpression();
 			expr.setLeft(term);
 			return expr;
@@ -50,7 +51,7 @@ public class ParserExpr {
 	private NodeTerm parseTerm() throws ParserException {
 		NodeTermType nodeTermType = parseFactor();
 
-		if(this.index >= tokens.length()) {
+		if(this.index >= tokens.size()) {
 			return new NodeTerm(nodeTermType);
 		}
 		
@@ -108,14 +109,14 @@ public class ParserExpr {
 	}
 	
 	private Optional<Token> peak() {
-		if(this.index > this.tokens.length()) {
+		if(this.tokens.isEmpty()) {
 			return Optional.empty();
 		} else {
-			return Optional.ofNullable(this.tokens.get(this.index));
+			return Optional.ofNullable(this.tokens.getValue());
 		}
 	}
 	
 	private Token consume() {
-		return this.tokens.get(this.index++);
+		return this.tokens.pop();
 	}
 }
