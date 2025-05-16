@@ -19,13 +19,16 @@ public class ParserExpr {
 	
 	public NodeExpression parse() throws ParserException {
 		NodeExpression expr = parseExpression();
+		if(expr.getRight() == null) {
+			return (NodeExpression) expr.getLeft().getType();
+		}
 		return expr;
 	}
 
 	private NodeExpression parseExpression() throws ParserException {
 		NodeTerm term = parseTerm();
 
-		if(this.index >= tokens.size()) {
+		if(this.tokens.isEmpty()) {
 			NodeExpression expr = new NodeExpression();
 			expr.setLeft(term);
 			return expr;
@@ -37,12 +40,16 @@ public class ParserExpr {
 			NodeExpression newExpr = new NodeExpression();
 			newExpr.setLeft(term);
 			newExpr.setOperation(consume());
-			NodeTerm newTerm = parseTerm();
- 			newExpr.setRight(newTerm);
+			NodeExpression expr = parseExpression();
+ 			if(expr.getRight() == null) {
+				newExpr.setRight(expr.getLeft());
+			} else {
+				newExpr.setRight(new NodeTerm(expr));
+			}
 			return newExpr;
 		} else {
 			throw new ParserException(
-				"Invalid expression: missing <TokenType.NUMBER> or <TokenType.OPEN_PARENTHESES>"
+				"Invalid expression: missing <TokenType.OPERATOR>"
 			);
 		}
 		
@@ -51,7 +58,7 @@ public class ParserExpr {
 	private NodeTerm parseTerm() throws ParserException {
 		NodeTermType nodeTermType = parseFactor();
 
-		if(this.index >= tokens.size()) {
+		if(this.tokens.isEmpty()) {
 			return new NodeTerm(nodeTermType);
 		}
 		
@@ -66,18 +73,14 @@ public class ParserExpr {
 				NodeExpression newExpr = new NodeExpression();
 				newExpr.setLeft(new NodeTerm(nodeTermType));
 				newExpr.setOperation(consume());
-				NodeTerm newTerm = parseTerm();
-				newExpr.setRight(newTerm);
+				newExpr.setRight(parseTerm());
 				return new NodeTerm(newExpr);
 			} else {
 				return new NodeTerm(nodeTermType);
 			}
-		} else if(currentToken.getType().equals(TokenType.CLOSE_PARENTHESES)) {
-			consume();
-			return null;
 		} else {
 			throw new ParserException(
-				"Invalid expression: missing <TokenType.NUMBER> or <TokenType.OPEN_PARENTHESES>"
+				"Invalid expression: missing <TokenType.OPERATOR>"
 			);
 		}		
 	}
