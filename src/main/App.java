@@ -1,5 +1,6 @@
 package main;
 
+import main.exprInterpreter.calculator.Calculator;
 import main.exprInterpreter.datastruct.*;
 
 import main.exprInterpreter.token.Token;
@@ -12,18 +13,27 @@ public class App {
 
 	public static void main(String[] args) {
 		//Window window = new Window();
-		String expr = "";
+		String expr = "(x + x) ^ x";
 		try {
 			Queue<Token> tokens = new TokenManager(expr).tokenize();
 			while(tokens.havePrev()) {
 				System.out.print(toString(tokens.current.getValue().getValue()) + ", ");
 			}
 			System.out.println();
+
 			NodeExpression tree = new ParserExpr(tokens).parse();
+
+			Calculator calculator = new Calculator(expr);
+			calculator.setX_Value(2);
+			double result = calculator.calculate();
+
+			System.out.println(expr + " = " + result);
+
 			System.out.println("\nFuncionou!");
 		} catch (Exception err) {
 			err.printStackTrace();
 		}
+
 	}
 
 	private static String toString(char[] value) {
