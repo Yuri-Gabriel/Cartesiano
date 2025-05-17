@@ -58,6 +58,35 @@ public class ParserExpr {
 	}
 
 	private NodeTerm parseTerm() throws ParserException {
+		NodeTerm nodeTerm = parseTermPower();
+
+		if(this.tokens.isEmpty()) {
+			return nodeTerm;
+		}
+		
+		Token currentToken = peak().get();
+
+		if(currentToken.getType().equals(TokenType.OPERATOR)) {
+			if(currentToken.getValue()[0] == OperatorType.MULTIPLICATION.getValue() ||
+				currentToken.getValue()[0] == OperatorType.DIVISION.getValue()) {
+				NodeExpression newExpr = new NodeExpression();
+				newExpr.setLeft(nodeTerm);
+				newExpr.setOperation(consume());
+				newExpr.setRight(parseTerm());
+				return new NodeTerm(newExpr);
+			} else {
+				return nodeTerm;
+			}
+		} else if(currentToken.getType().equals(TokenType.CLOSE_PARENTHESES)){
+			return nodeTerm;
+	 	} else {
+			throw new ParserException(
+				"Invalid expression: missing <TokenType.OPERATOR>"
+			);
+		}		
+	}
+
+	private NodeTerm parseTermPower() throws ParserException {
 		NodeTermType nodeTermType = parseFactor();
 
 		if(this.tokens.isEmpty()) {
@@ -67,20 +96,13 @@ public class ParserExpr {
 		Token currentToken = peak().get();
 
 		if(currentToken.getType().equals(TokenType.OPERATOR)) {
-			if(currentToken.getValue()[0] == OperatorType.MULTIPLICATION.getValue() ||
-				currentToken.getValue()[0] == OperatorType.DIVISION.getValue()) {
-				NodeExpression newExpr = new NodeExpression();
-				newExpr.setLeft(new NodeTerm(nodeTermType));
-				newExpr.setOperation(consume());
-				newExpr.setRight(parseTerm());
-				return new NodeTerm(newExpr);
-			} else if(
+			if(
 				currentToken.getValue()[0] == OperatorType.EXPONENTIATION.getValue()
 			){
 				NodeExpression newExpr = new NodeExpression();
 				newExpr.setLeft(new NodeTerm(nodeTermType));
 				newExpr.setOperation(consume());
-				newExpr.setRight(parseTerm());
+				newExpr.setRight(parseTermPower());
 				return new NodeTerm(newExpr);
 			} else {
 				return new NodeTerm(nodeTermType);

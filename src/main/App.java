@@ -1,6 +1,7 @@
 package main;
 
 import main.exprInterpreter.datastruct.*;
+
 import main.exprInterpreter.token.Token;
 import main.exprInterpreter.token.TokenManager;
 
@@ -11,7 +12,7 @@ public class App {
 
 	public static void main(String[] args) {
 		//Window window = new Window();
-		String expr = "(1 + 1) * (1 - 1) + 1";
+		String expr = "";
 		try {
 			Queue<Token> tokens = new TokenManager(expr).tokenize();
 			while(tokens.havePrev()) {
