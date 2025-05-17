@@ -9,11 +9,9 @@ import main.exprInterpreter.token.Token;
 import main.exprInterpreter.token.TokenType;
 
 public class ParserExpr {
-    private int index;
 	private Queue<Token> tokens;
 	
 	public ParserExpr(Queue<Token> tokens) {
-		this.index = 0;
 		this.tokens = tokens;
 	}
 	
@@ -47,7 +45,11 @@ public class ParserExpr {
 				newExpr.setRight(new NodeTerm(expr));
 			}
 			return newExpr;
-		} else {
+		} else if(currentToken.getType().equals(TokenType.CLOSE_PARENTHESES)){
+			NodeExpression expr = new NodeExpression();
+			expr.setLeft(term);
+			return expr;
+	 	} else {
 			throw new ParserException(
 				"Invalid expression: missing <TokenType.OPERATOR>"
 			);
@@ -78,7 +80,9 @@ public class ParserExpr {
 			} else {
 				return new NodeTerm(nodeTermType);
 			}
-		} else {
+		} else if(currentToken.getType().equals(TokenType.CLOSE_PARENTHESES)){
+			return new NodeTerm(nodeTermType);
+	 	} else {
 			throw new ParserException(
 				"Invalid expression: missing <TokenType.OPERATOR>"
 			);
@@ -95,6 +99,7 @@ public class ParserExpr {
 		} else if(currentToken.getType().equals(TokenType.OPEN_PARENTHESES)) {
 			consume();
 			NodeExpression expr = this.parseExpression();
+			currentToken = peak().get();
 			if(!currentToken.getType().equals(TokenType.CLOSE_PARENTHESES) || !peak().isPresent()) {
 				throw new ParserException(
 					"Invalid expression: missing <TokenType.CLOSE_PARENTHESES>"
@@ -107,8 +112,6 @@ public class ParserExpr {
 				"Invalid expression: migging <TokenType.NUMBER> or <TokenType.OPEN_PARENTHESES>"
 			);
 		}
-
-		
 	}
 	
 	private Optional<Token> peak() {

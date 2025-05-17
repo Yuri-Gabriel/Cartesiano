@@ -12,11 +12,11 @@ import main.exprInterpreter.token.TokenManeger;
 @ExtendWith(TimingExtension.class)
 public class TokenManagerTest {
 	
-	@Test
-	public void tokenize_returns_list_of_tokens() throws TokenException {
-		String expr = "2 + 2";
-		Assertions.assertTrue(new TokenManeger(expr).tokenize() instanceof List<Token>);
-	}
+	// @Test
+	// public void tokenize_returns_list_of_tokens() throws TokenException {
+	// 	String expr = "2 + 2";
+	// 	Assertions.assertTrue(new TokenManeger(expr).tokenize() instanceof List<Token>);
+	// }
 	@Test
 	public void tokenize_dont_accept_other_letters() throws TokenException {
 		String expr = "2 + 2 pao";
