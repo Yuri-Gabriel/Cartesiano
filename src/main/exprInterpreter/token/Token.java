@@ -2,16 +2,18 @@ package main.exprInterpreter.token;
 
 public class Token {
 	private TokenType type;
-	private String value;
+	private char[] value;
 	
-	public Token(TokenType type, String value) {
+	public Token(TokenType type, char[] value) {
 		this.type = type;
 		this.value = value;
 	}
 	
 	public Token(TokenType type, OperatorType operatorType) {
 		this.type = type;
-		this.value = Character.toString((char) operatorType.getValue());
+		this.value = new char[] {
+			operatorType.getValue()
+		};
 	}
 
 	public TokenType getType() {
@@ -22,11 +24,11 @@ public class Token {
 		this.type = type;
 	}
 
-	public String getValue() {
+	public char[] getValue() {
 		return value;
 	}
 
-	public void setValue(String value) {
+	public void setValue(char[] value) {
 		this.value = value;
 	}
 }

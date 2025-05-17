@@ -4,12 +4,12 @@ import java.util.Optional;
 
 import main.exprInterpreter.datastruct.*;
 
-public class TokenManeger {
+public class TokenManager {
 	
 	private int index;
 	private String expr;
 	
-	public TokenManeger(String expr) {
+	public TokenManager(String expr) {
 		this.index = 0;
 		this.expr = expr;
 	}
@@ -58,7 +58,10 @@ public class TokenManeger {
 			}
 			
 			if (isNumeric(buff)) {
-				tokens.add(new Token(TokenType.NUMBER, buff));
+				tokens.add(new Token(
+					TokenType.NUMBER,
+					buff.toCharArray()
+				));
 			} else if (buff.length() == 1) {
 				char symbol = buff.charAt(0);
 				switch (symbol) {
@@ -75,16 +78,25 @@ public class TokenManeger {
 						tokens.add(new Token(TokenType.OPERATOR, OperatorType.DIVISION));
 						break;
 					case '(':
-						tokens.add(new Token(TokenType.OPEN_PARENTHESES, "("));
+						tokens.add(new Token(
+							TokenType.OPEN_PARENTHESES,
+							new char[] {'('}
+						));
 						break;
 					case ')':
-						tokens.add(new Token(TokenType.CLOSE_PARENTHESES, ")"));
+						tokens.add(new Token(
+							TokenType.CLOSE_PARENTHESES,
+							new char[] {')'}
+						));
 						break;
 					case '^':
 						tokens.add(new Token(TokenType.OPERATOR, OperatorType.EXPONENTIATION));
 						break;
 					case 'x':
-						tokens.add(new Token(TokenType.VARIABLE_X, "x"));
+						tokens.add(new Token(
+							TokenType.VARIABLE_X,
+							new char[] {'x'}
+						));
 						break;
 					default:
 						throw new TokenException("Invalid symbol: " + buff);

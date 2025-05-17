@@ -8,7 +8,7 @@ import main.exprInterpreter.parser.ParserExpr;
 import main.exprInterpreter.parser.nodetype.NodeTerm;
 import main.exprInterpreter.parser.ParserException;
 
-import main.exprInterpreter.token.TokenManeger;
+import main.exprInterpreter.token.TokenManager;
 import main.exprInterpreter.token.Token;
 import main.exprInterpreter.token.TokenException;
 

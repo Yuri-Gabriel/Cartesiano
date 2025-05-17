@@ -1,17 +1,17 @@
 package main.exprInterpreter.parser.nodetype;
 
 public final class NodeFactor implements NodeTermType {
-    private Integer value;
+    private char[] value;
 
-    public NodeFactor(int value) {
+    public NodeFactor(char[] value) {
         this.setValue(value);
     }
 
-    public Integer getValue() {
+    public char[] getValue() {
         return value;
     }
 
-    public void setValue(Integer value) {
+    public void setValue(char[] value) {
         this.value = value;
     }
 

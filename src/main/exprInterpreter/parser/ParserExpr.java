@@ -67,11 +67,16 @@ public class ParserExpr {
 		Token currentToken = peak().get();
 
 		if(currentToken.getType().equals(TokenType.OPERATOR)) {
-			if(currentToken.getValue().equals(
-					Character.toString(OperatorType.MULTIPLICATION.getValue())) ||
-				currentToken.getValue().equals(
-					Character.toString(OperatorType.DIVISION.getValue())
-			)) {
+			if(currentToken.getValue()[0] == OperatorType.MULTIPLICATION.getValue() ||
+				currentToken.getValue()[0] == OperatorType.DIVISION.getValue()) {
+				NodeExpression newExpr = new NodeExpression();
+				newExpr.setLeft(new NodeTerm(nodeTermType));
+				newExpr.setOperation(consume());
+				newExpr.setRight(parseTerm());
+				return new NodeTerm(newExpr);
+			} else if(
+				currentToken.getValue()[0] == OperatorType.EXPONENTIATION.getValue()
+			){
 				NodeExpression newExpr = new NodeExpression();
 				newExpr.setLeft(new NodeTerm(nodeTermType));
 				newExpr.setOperation(consume());
@@ -93,19 +98,33 @@ public class ParserExpr {
 
 		Token currentToken = peak().get();
 
-		if(currentToken.getType().equals(TokenType.NUMBER)) {
-			int value = Integer.parseInt(consume().getValue());
-			return new NodeFactor(value);
+		if(currentToken.getType().equals(TokenType.NUMBER) ||
+			currentToken.getType().equals(TokenType.VARIABLE_X)
+		) {
+			return new NodeFactor(consume().getValue());
 		} else if(currentToken.getType().equals(TokenType.OPEN_PARENTHESES)) {
 			consume();
 			NodeExpression expr = this.parseExpression();
-			currentToken = peak().get();
+			try {
+				currentToken = peak().get();
+			} catch (Exception err) {
+				throw new ParserException(
+					"Invalid expression: missing <TokenType.CLOSE_PARENTHESES>"
+				);
+			}
+			
 			if(!currentToken.getType().equals(TokenType.CLOSE_PARENTHESES) || !peak().isPresent()) {
 				throw new ParserException(
 					"Invalid expression: missing <TokenType.CLOSE_PARENTHESES>"
 				);
 			}
+
 			consume();
+
+			if(expr.getRight() == null) {
+				return expr.getLeft().getType();
+			}
+
 			return expr;
 		} else {
 			throw new ParserException(
