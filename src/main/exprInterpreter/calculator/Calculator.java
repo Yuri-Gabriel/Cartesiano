@@ -12,7 +12,7 @@ import main.exprInterpreter.token.TokenException;
 import main.exprInterpreter.token.TokenManager;
 
 public class Calculator {
-    private Integer x_value;
+    private Double x_value;
     private String expression;
     private NodeExpression tree;
 
@@ -129,7 +129,27 @@ public class Calculator {
         return b > 0 ? a * pow(a, b - 1) : 1;
     }
 
-    public void setX_Value(int value) {
-        this.x_value = value;
+    public Double getX_value() {
+        return x_value;
+    }
+
+    public void setX_value(Double x_value) {
+        this.x_value = x_value;
+    }
+
+    public String getExpression() {
+        return expression;
+    }
+
+    public void setExpression(String expression) {
+        this.expression = expression;
+    }
+
+    public NodeExpression getTree() {
+        return tree;
+    }
+
+    public void setTree(NodeExpression tree) {
+        this.tree = tree;
     }
 }

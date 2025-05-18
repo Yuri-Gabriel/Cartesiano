@@ -16,7 +16,29 @@ public class ParserExpr {
 	}
 	
 	public NodeExpression parse() throws ParserException {
-		NodeExpression expr = parseExpression();
+		NodeExpression expr = new NodeExpression();
+		if(this.tokens.size() == 1 && this.tokens.getValue().getType().equals(TokenType.NUMBER)) {
+			char[] value = this.tokens.getValue().getValue();
+			expr.setLeft(
+				new NodeTerm(
+					new NodeFactor(value)
+				)
+			);
+			expr.setOperation(
+				new Token(
+					TokenType.OPERATOR,
+					OperatorType.MULTIPLICATION
+				)
+			);
+			expr.setRight(
+				new NodeTerm(
+					new NodeFactor(new char[] {'1'})
+				)
+			);
+			return expr;
+		}
+
+		expr = parseExpression();
 		if(expr.getRight() == null) {
 			return (NodeExpression) expr.getLeft().getType();
 		}
@@ -150,7 +172,7 @@ public class ParserExpr {
 			return expr;
 		} else {
 			throw new ParserException(
-				"Invalid expression: migging <TokenType.NUMBER> or <TokenType.OPEN_PARENTHESES>"
+				"Invalid expression: missing <TokenType.NUMBER> or <TokenType.OPEN_PARENTHESES>"
 			);
 		}
 	}

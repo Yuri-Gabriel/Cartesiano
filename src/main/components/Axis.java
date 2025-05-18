@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import javax.swing.JPanel;
-import java.math.MathContext;
 
 public class Axis extends JPanel {
 	

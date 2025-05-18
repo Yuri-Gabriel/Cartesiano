@@ -24,15 +24,14 @@ public class Window extends JFrame {
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setBackground(Color.WHITE);
 		this.setLayout(new BorderLayout());
+		this.setTitle("Cartesiano");
 		
 		FuncInput input = new FuncInput();
 		
 		axis = new Axis();
 		
         graph = new Graph();
-        graph.setFunc((x) -> {
-			return x * x;
-		});
+        graph.setMathExpression("x ^ 2");
         
         JPanel layeredPane = new JPanel();
         layeredPane.setLayout(new OverlayLayout(layeredPane));
