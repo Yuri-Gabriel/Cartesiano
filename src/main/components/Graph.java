@@ -35,10 +35,10 @@ public class Graph extends JPanel {
 		
         
         //Defini os valores maximos e minimos para X e Y de acordo com o tamanho da janela
-		double xMin = window_width / -10;
-        double xMax = window_width / 10;
-        double yMin = window_height / -10;
-        double yMax = window_height / 10;
+		double xMin = window_width / -5;
+        double xMax = window_width / 5;
+        double yMin = window_height / -5;
+        double yMax = window_height / 5;
 		
         //Defini quando pixels da janela cabem em um ponto do plano cartesiano 
 		double scaleX = window_width / (xMax - xMin) * 1;
@@ -66,7 +66,6 @@ public class Graph extends JPanel {
 	}
 	
 	public void setMathExpression(String expr) {
-		System.out.println(expr);
 		try {
 			this.tokens = new TokenManager(expr).tokenize();
 			this.treeExpr = new ParserExpr(tokens).parse();

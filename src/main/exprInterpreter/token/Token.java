@@ -16,6 +16,11 @@ public class Token {
 		};
 	}
 
+	public Token(TokenType type, TrigType trigType) {
+		this.type = type;
+		this.value = trigType.getValue().toCharArray();
+	}
+
 	public TokenType getType() {
 		return type;
 	}

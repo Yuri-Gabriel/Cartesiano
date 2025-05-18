@@ -79,6 +79,18 @@ public class ParserExpr {
 		
 	}
 
+	private NodeTerm parseTrig() throws ParserException {
+		NodeTerm nodeTerm = parseTerm();
+
+		if(this.tokens.isEmpty()) {
+			return nodeTerm;
+		}
+
+		Token currentToken = peak().get();
+
+		return null;
+	}
+
 	private NodeTerm parseTerm() throws ParserException {
 		NodeTerm nodeTerm = parseTermPower();
 

@@ -47,7 +47,6 @@ public class FuncInput extends JPanel {
 
 	private void calculateFunc() {
 		String expr = this.inputText.getText();
-		System.out.println(expr);
 		Window.graph.setMathExpression(expr);
 		Window.graph.repaint();
 	}

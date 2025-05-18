@@ -40,10 +40,6 @@ public class TokenManager {
 							while (Character.isDigit(current_character)) {
 								buff += current_character;
 								current_character = this.consume();
-								System.out.println();
-							}
-							if(current_character != ' ') {
-								this.index--;
 							}
 						} catch (Exception e) { }
 					} else {
@@ -53,6 +49,9 @@ public class TokenManager {
 								current_character = this.consume();
 							}
 						} catch (Exception e) { }
+					}
+					if(current_character != ' ') {
+						this.index--;
 					}
 					break;
 			}
@@ -101,6 +100,21 @@ public class TokenManager {
 					default:
 						throw new TokenException("Invalid symbol: " + buff);
 				}
+			} else if(buff.equals("sin")) {
+				tokens.add(new Token(
+					TokenType.TRIG,
+					TrigType.SIN
+				));
+			} else if(buff.equals("cos")) {
+				tokens.add(new Token(
+					TokenType.TRIG,
+					TrigType.COS
+				));
+			} else if(buff.equals("tan")) {
+				tokens.add(new Token(
+					TokenType.TRIG,
+					TrigType.TAN
+				));
 			} else {
 				throw new TokenException("Invalid token: " + buff);
 			}

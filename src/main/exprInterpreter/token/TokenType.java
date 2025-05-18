@@ -5,7 +5,8 @@ public enum TokenType {
 	CLOSE_PARENTHESES(')'),
 	VARIABLE_X('x'),
 	OPERATOR(),
-	NUMBER();
+	NUMBER(),
+	TRIG();
 	
 	private int value;
 

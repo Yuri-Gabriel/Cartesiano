@@ -38,6 +38,9 @@ public class Calculator {
             }
 
             Queue<Token> tokens = this.getQueueTokens();
+            while(tokens.havePrev()) {
+                System.out.println(toString(tokens.current.getValue().getValue()) + ", ");
+            }
             NodeExpression tree = this.getTreeExpression(tokens);
 
             NodeFactor result = resolveTree(tree);
