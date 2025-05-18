@@ -88,6 +88,13 @@ public class ParserExpr {
 
 		Token currentToken = peak().get();
 
+		if(currentToken.getType().equals(TokenType.TRIG)) {
+			NodeTrig extrTrig = new NodeTrig();
+			
+		} else if(currentToken.getType().equals(TokenType.CLOSE_PARENTHESES)){
+			return nodeTerm;
+		}
+
 		return null;
 	}
 

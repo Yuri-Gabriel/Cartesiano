@@ -2,7 +2,7 @@ package main.exprInterpreter.parser.nodetype;
 
 import main.exprInterpreter.token.Token;
 
-public final class NodeExpression implements NodeTermType {
+public final class NodeExpression implements NodeTermType, NodeTrigType {
     private NodeTerm left;
     private Token operation;
     private NodeTerm right;
