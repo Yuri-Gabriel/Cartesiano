@@ -10,7 +10,7 @@ public class App {
 		// } catch (Exception err) {
 		// 	System.out.println(err.getLocalizedMessage());
 		// }
-		String expr = "sin(x) + cos(x) + tan(x)";
+		String expr = "sin(x)";
 		Calculator calculator = new Calculator(expr);
 		calculator.setX_value(1.0);
 		double result = calculator.calculate();

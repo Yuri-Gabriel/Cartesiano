@@ -39,8 +39,24 @@ public class ParserExpr {
 		}
 
 		expr = parseExpression();
-		if(expr.getRight() == null) {
+		if(expr.getRight() == null && expr.getLeft().getType() instanceof NodeExpression) {
 			return (NodeExpression) expr.getLeft().getType();
+		} else if(expr.getRight() == null && expr.getLeft().getType() instanceof NodeTrig) {
+			expr.setLeft(
+				new NodeTerm(expr.getLeft().getType())
+			);
+			expr.setOperation(
+				new Token(
+					TokenType.OPERATOR,
+					OperatorType.MULTIPLICATION
+				)
+			);
+			expr.setRight(
+				new NodeTerm(
+					new NodeFactor(new char[] {'1'})
+				)
+			);
+			return expr;
 		}
 		return expr;
 	}
@@ -48,10 +64,12 @@ public class ParserExpr {
 	private NodeExpression parseExpression() throws ParserException {
 		NodeTerm term = parseTerm();
 
-		if(this.tokens.isEmpty()) {
+		if(this.tokens.isEmpty() && !(term.getType() instanceof NodeExpression)) {
 			NodeExpression expr = new NodeExpression();
 			expr.setLeft(term);
 			return expr;
+		} else if(this.tokens.isEmpty() && term.getType() instanceof NodeExpression) {
+			return (NodeExpression) term.getType();
 		}
 		
 		
@@ -77,25 +95,6 @@ public class ParserExpr {
 			);
 		}
 		
-	}
-
-	private NodeTerm parseTrig() throws ParserException {
-		NodeTerm nodeTerm = parseTerm();
-
-		if(this.tokens.isEmpty()) {
-			return nodeTerm;
-		}
-
-		Token currentToken = peak().get();
-
-		if(currentToken.getType().equals(TokenType.TRIG)) {
-			NodeTrig extrTrig = new NodeTrig();
-			
-		} else if(currentToken.getType().equals(TokenType.CLOSE_PARENTHESES)){
-			return nodeTerm;
-		}
-
-		return null;
 	}
 
 	private NodeTerm parseTerm() throws ParserException {
@@ -189,6 +188,21 @@ public class ParserExpr {
 			}
 
 			return expr;
+		} else if(currentToken.getType().equals(TokenType.TRIG)) {
+			NodeTrig trigExpr = new NodeTrig();
+			trigExpr.setFuncTring(currentToken.getValue());
+			consume();
+			consume();
+			NodeExpression expr = parseExpression();
+			if(expr.getRight() == null) {
+				trigExpr.setType(new NodeTerm(
+					expr.getLeft().getType()
+				));
+			} else {
+				trigExpr.setType(new NodeTerm(expr));
+			}
+			consume();
+			return trigExpr;
 		} else {
 			throw new ParserException(
 				"Invalid expression: missing <TokenType.NUMBER> or <TokenType.OPEN_PARENTHESES>"

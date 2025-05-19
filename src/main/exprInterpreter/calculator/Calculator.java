@@ -7,6 +7,7 @@ import main.exprInterpreter.parser.ParserExpr;
 import main.exprInterpreter.parser.nodetype.NodeExpression;
 import main.exprInterpreter.parser.nodetype.NodeFactor;
 import main.exprInterpreter.parser.nodetype.NodeTermType;
+import main.exprInterpreter.parser.nodetype.NodeTrig;
 import main.exprInterpreter.token.Token;
 import main.exprInterpreter.token.TokenException;
 import main.exprInterpreter.token.TokenManager;
@@ -115,6 +116,15 @@ public class Calculator {
             }
             char[] resultFactorValue = Double.toString(result).toCharArray();
             return new NodeFactor(resultFactorValue);
+        } else if(current instanceof NodeTrig) {
+            NodeTrig exprTrig = (NodeTrig) current;
+            if(exprTrig.getType().getType() instanceof NodeFactor) {
+                NodeFactor value = (NodeFactor) exprTrig.getType().getType();
+            } else {
+                NodeFactor value = resolveTree(exprTrig.getType().getType());
+            }
+            String trigFunc = toString(exprTrig.getFuncTring());
+            i
         }
 
         return (NodeFactor) current;
