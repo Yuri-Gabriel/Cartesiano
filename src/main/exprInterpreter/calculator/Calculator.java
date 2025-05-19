@@ -118,13 +118,34 @@ public class Calculator {
             return new NodeFactor(resultFactorValue);
         } else if(current instanceof NodeTrig) {
             NodeTrig exprTrig = (NodeTrig) current;
+            NodeFactor valueFactor = null;
             if(exprTrig.getType().getType() instanceof NodeFactor) {
-                NodeFactor value = (NodeFactor) exprTrig.getType().getType();
+                valueFactor = (NodeFactor) exprTrig.getType().getType();
             } else {
-                NodeFactor value = resolveTree(exprTrig.getType().getType());
+                valueFactor = resolveTree(exprTrig.getType().getType());
             }
+
+            double value = 0.0;
+            System.out.println(this.x_value);
+            if(toString(valueFactor.getValue()).equals("x")) {
+                value = this.x_value;
+            } else {
+                value = Double.parseDouble(toString(valueFactor.getValue()));
+            }
+            
             String trigFunc = toString(exprTrig.getFuncTring());
-            i
+            double result = 0.0;
+            
+
+            if(trigFunc.equals("sin")) {
+                result = Math.sin(value);
+            } else if(trigFunc.equals("cos")) {
+                result = Math.cos(value);
+            } else if(trigFunc.equals("tan")) {
+                result = Math.tan(value);
+            }
+
+            return new NodeFactor(Double.toString(result).toCharArray());
         }
 
         return (NodeFactor) current;
