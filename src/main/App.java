@@ -10,9 +10,9 @@ public class App {
 		// } catch (Exception err) {
 		// 	System.out.println(err.getLocalizedMessage());
 		// }
-		String expr = "log(x) + ln(x)";
+		String expr = "log(x)";
 		Calculator calculator = new Calculator(expr);
-		calculator.setX_value(3.14 / 2);
+		calculator.setX_value(1.0);
 		double result = calculator.calculate();
 		System.out.println();
 		System.out.println(expr + " = " + result);

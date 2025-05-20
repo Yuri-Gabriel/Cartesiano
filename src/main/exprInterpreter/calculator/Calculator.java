@@ -6,6 +6,7 @@ import main.exprInterpreter.parser.ParserException;
 import main.exprInterpreter.parser.ParserExpr;
 import main.exprInterpreter.parser.nodetype.NodeExpression;
 import main.exprInterpreter.parser.nodetype.NodeFactor;
+import main.exprInterpreter.parser.nodetype.NodeLog;
 import main.exprInterpreter.parser.nodetype.NodeTermType;
 import main.exprInterpreter.parser.nodetype.NodeTrig;
 import main.exprInterpreter.token.Token;
@@ -149,6 +150,36 @@ public class Calculator {
                 result = Math.cos(value);
             } else if(trigFunc.equals("tan")) {
                 result = Math.tan(value);
+            }
+
+            return new NodeFactor(Double.toString(result).toCharArray());
+        } else if(current instanceof NodeLog) {
+            NodeLog exprLog = (NodeLog) current;
+            NodeFactor valueFactor = null;
+            if(exprLog.getType().getType() instanceof NodeFactor) {
+                valueFactor = (NodeFactor) exprLog.getType().getType();
+            } else {
+                valueFactor = resolveTree(exprLog.getType().getType());
+            }
+
+            double value = 0.0;
+            System.out.println(this.x_value);
+            if(toString(valueFactor.getValue()).equals("x")) {
+                value = this.x_value;
+            } else if(toString(valueFactor.getValue()).equals("-x")) {
+                value = this.x_value * -1;
+            } else {
+                value = Double.parseDouble(toString(valueFactor.getValue()));
+            }
+            
+            String trigFunc = toString(exprLog.getFuncLog());
+            double result = 0.0;
+            
+
+            if(trigFunc.equals("log")) {
+                result = Math.log10(value);
+            } else if(trigFunc.equals("cos")) {
+                result = Math.log(value);
             }
 
             return new NodeFactor(Double.toString(result).toCharArray());
