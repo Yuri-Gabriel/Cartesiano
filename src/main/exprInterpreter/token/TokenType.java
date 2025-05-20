@@ -6,7 +6,8 @@ public enum TokenType {
 	VARIABLE_X('x'),
 	OPERATOR(),
 	NUMBER(),
-	TRIG();
+	TRIG(),
+	LOGARITHM();
 	
 	private int value;
 

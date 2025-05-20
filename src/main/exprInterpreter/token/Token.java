@@ -21,6 +21,11 @@ public class Token {
 		this.value = trigType.getValue().toCharArray();
 	}
 
+	public Token(TokenType type, LogarithmType logarithmType) {
+		this.type = type;
+		this.value = logarithmType.getValue().toCharArray();
+	}
+
 	public TokenType getType() {
 		return type;
 	}

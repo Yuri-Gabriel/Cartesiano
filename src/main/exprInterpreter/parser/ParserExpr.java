@@ -203,6 +203,21 @@ public class ParserExpr {
 			}
 			consume();
 			return trigExpr;
+		} else if(currentToken.getType().equals(TokenType.LOGARITHM)) {
+			NodeTrig trigExpr = new NodeTrig();
+			trigExpr.setFuncTring(currentToken.getValue());
+			consume();
+			consume();
+			NodeExpression expr = parseExpression();
+			if(expr.getRight() == null) {
+				trigExpr.setType(new NodeTerm(
+					expr.getLeft().getType()
+				));
+			} else {
+				trigExpr.setType(new NodeTerm(expr));
+			}
+			consume();
+			return trigExpr;
 		} else {
 			throw new ParserException(
 				"Invalid expression: missing <TokenType.NUMBER> or <TokenType.OPEN_PARENTHESES>"

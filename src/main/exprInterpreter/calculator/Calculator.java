@@ -133,6 +133,8 @@ public class Calculator {
             System.out.println(this.x_value);
             if(toString(valueFactor.getValue()).equals("x")) {
                 value = this.x_value;
+            } else if(toString(valueFactor.getValue()).equals("-x")) {
+                value = this.x_value * -1;
             } else {
                 value = Double.parseDouble(toString(valueFactor.getValue()));
             }

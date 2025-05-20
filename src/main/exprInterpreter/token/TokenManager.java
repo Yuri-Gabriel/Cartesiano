@@ -141,6 +141,16 @@ public class TokenManager {
 						TokenType.VARIABLE_X,
 						new char[] {'-', 'x'}
 					));
+			} else if(buff.equals("log")) {
+				tokens.add(new Token(
+					TokenType.LOGARITHM,
+					LogarithmType.LOG
+				));
+			} else if(buff.equals("ln")) {
+				tokens.add(new Token(
+					TokenType.LOGARITHM,
+					LogarithmType.LN
+				));
 			} else {
 				throw new TokenException("Invalid token: " + buff);
 			}
