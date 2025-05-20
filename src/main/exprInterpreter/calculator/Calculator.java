@@ -40,7 +40,7 @@ public class Calculator {
 
             Queue<Token> tokens = this.getQueueTokens();
             while(tokens.havePrev()) {
-                System.out.println(toString(tokens.current.getValue().getValue()) + ", ");
+                System.out.print(toString(tokens.current.getValue().getValue()) + ", ");
             }
             NodeExpression tree = this.getTreeExpression(tokens);
 
@@ -80,9 +80,13 @@ public class Calculator {
 
             if(leftValue.equals("x")) {
                 leftValue = this.x_value.toString();
+            } else if(leftValue.equals("-x")) {
+            	leftValue = Double.toString(this.x_value * -1);
             }
             if(rightValue.equals("x")) {
                 rightValue = this.x_value.toString();
+            } else if(rightValue.equals("-x")) {
+            	rightValue = Double.toString(this.x_value * -1);
             }
 
             double leftNumber = Double.parseDouble(leftValue);

@@ -31,6 +31,27 @@ public class TokenManager {
 				case ')':
 				case 'x':
 				case '^':
+					if(current_character == '-') {
+						char character = this.consume();
+						if(Character.isDigit(character)) {
+							try {
+								while(Character.isDigit(character)) {
+									buff += character;
+									character = this.consume();
+								}
+							} catch (Exception err) { }
+							
+							if(character != ' ') {
+								this.index--;
+							}
+							buff = current_character + "" + character;
+							break;
+						} else if(character == 'x') {
+							buff = current_character + "" + character;
+							break;
+						}
+						
+					}
 					buff += current_character;
 					break;
 	
@@ -115,6 +136,11 @@ public class TokenManager {
 					TokenType.TRIG,
 					TrigType.TAN
 				));
+			} else if(buff.equals("-x")) {
+				tokens.add(new Token(
+						TokenType.VARIABLE_X,
+						new char[] {'-', 'x'}
+					));
 			} else {
 				throw new TokenException("Invalid token: " + buff);
 			}
