@@ -41,7 +41,7 @@ public class ParserExpr {
 		expr = parseExpression();
 		if(expr.getRight() == null && expr.getLeft().getType() instanceof NodeExpression) {
 			return (NodeExpression) expr.getLeft().getType();
-		} else if(expr.getRight() == null && expr.getLeft().getType() instanceof NodeTrig) {
+		} else if(expr.getRight() == null && !(expr.getLeft().getType() instanceof NodeExpression)) {
 			expr.setLeft(
 				new NodeTerm(expr.getLeft().getType())
 			);
