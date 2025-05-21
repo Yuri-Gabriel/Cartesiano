@@ -44,7 +44,7 @@ public class TokenManager {
 							if(character != ' ') {
 								this.index--;
 							}
-							buff = current_character + "" + character;
+							buff = current_character + "" + buff;
 							break;
 						} else if(character == 'x') {
 							buff = current_character + "" + character;
