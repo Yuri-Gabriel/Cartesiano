@@ -40,11 +40,9 @@ public class Calculator {
             }
 
             Queue<Token> tokens = this.getQueueTokens();
-            while(tokens.havePrev()) {
-                System.out.print(toString(tokens.current.getValue().getValue()) + ", ");
-            }
+            
             NodeExpression tree = this.getTreeExpression(tokens);
-
+            if(tree == null) return 0.0;
             NodeFactor result = resolveTree(tree);
             resultValue = toString(result.getValue());
         } else {

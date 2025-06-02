@@ -16,6 +16,9 @@ public class ParserExpr {
 	}
 	
 	public NodeExpression parse() throws ParserException {
+		if(peak().isEmpty()) {
+			return null;
+		}
 		NodeExpression expr = new NodeExpression();
 		if(this.tokens.size() == 1 && this.tokens.getValue().getType().equals(TokenType.NUMBER)) {
 			char[] value = this.tokens.getValue().getValue();
@@ -166,6 +169,11 @@ public class ParserExpr {
 			return new NodeFactor(consume().getValue());
 		} else if(currentToken.getType().equals(TokenType.OPEN_PARENTHESES)) {
 			consume();
+			if(peak().isEmpty()) {
+				throw new ParserException(
+						"Invalid expression: missing <TokenType.OPEN_PARENTHESES> or <TokenType.NUMBER>"
+					);
+			}	
 			NodeExpression expr = this.parseExpression();
 			try {
 				currentToken = peak().get();
